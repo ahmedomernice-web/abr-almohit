@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>عبر المحيط لاستيراد السيارات</title>
+<meta name="description" content="عبر المحيط لاستيراد السيارات من أمريكا — شراء من المزادات، شحن بحري، تخليص، وحساب عميل لمتابعة الفواتير والمدفوعات.">
+<meta name="theme-color" content="#0C2E40">
+<meta property="og:title" content="عبر المحيط لاستيراد السيارات">
+<meta property="og:description" content="سيارتك من أمريكا لين باب حوشك. ادخل بكودك وتابع حسابك.">
+<meta property="og:image" content="logo.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a deep-sea masthead with the copper pin, then one working column per view (company / client account / admin ledger). */
+:root{
+  --bg:#EEF3F4; --surface:#FFFFFF; --sunk:#E4ECEE; --ink:#0F2232; --muted:#566977; --line:#D3DEE2;
+  --sea:#174E66; --sea-2:#0C2E40; --sea-ink:#EAF4F7; --copper:#A96F3D; --copper-ink:#8B5526; --copper-soft:#F3E6D8;
+  --good:#2C7A57; --good-soft:#E1F1E8; --bad:#B23E2C; --bad-soft:#F8E4DF;
+  --display:"Alexandria","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1620; --surface:#11212D; --sunk:#0D1B25; --ink:#E5EEF2; --muted:#93A6B3; --line:#223947;
+  --sea:#0F3A4F; --sea-2:#07202D; --sea-ink:#EAF4F7; --copper:#D29A62; --copper-ink:#E2AE79; --copper-soft:#2E2318;
+  --good:#5CC18F; --good-soft:#12301F; --bad:#E5806B; --bad-soft:#371A14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1620; --surface:#11212D; --sunk:#0D1B25; --ink:#E5EEF2; --muted:#93A6B3; --line:#223947;
+  --sea:#0F3A4F; --sea-2:#07202D; --sea-ink:#EAF4F7; --copper:#D29A62; --copper-ink:#E2AE79; --copper-soft:#2E2318;
+  --good:#5CC18F; --good-soft:#12301F; --bad:#E5806B; --bad-soft:#371A14; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;direction:rtl}
+h1,h2,h3{font-family:var(--display);line-height:1.25;text-wrap:balance;margin:0}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;display:inline-block}
+.wrap{max-width:1040px;margin-inline:auto;padding-inline:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--sea-2);color:var(--sea-ink);border-bottom:1px solid rgba(255,255,255,.08)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;margin-inline-end:auto}
+.brand img{width:26px;height:auto}
+.brand b{font-family:var(--display);font-weight:700;font-size:16px}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.06);padding:4px;border-radius:999px}
+.tabs a{color:var(--sea-ink);text-decoration:none;padding:6px 14px;border-radius:999px;font-size:14px;opacity:.8}
+.tabs a[aria-current="page"]{background:var(--copper);color:#1b1006;opacity:1;font-weight:600}
+
+/* hero */
+.hero{background:radial-gradient(120% 90% at 85% 0%, var(--sea) 0%, var(--sea-2) 70%);color:var(--sea-ink);position:relative;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;padding-block:56px 64px}
+.hero .eyebrow{font-size:13px;letter-spacing:.04em;color:var(--copper);font-weight:600;margin-bottom:10px}
+.hero h1{font-size:clamp(30px,5.4vw,52px);font-weight:800}
+.hero h1 span{color:#E2AE79}
+.hero p.lead{margin-top:14px;max-width:46ch;font-size:17px;opacity:.88}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.hero .pin{width:clamp(120px,18vw,190px);filter:drop-shadow(0 18px 28px rgba(0,0,0,.35))}
+.route{display:flex;align-items:center;gap:10px;margin-top:28px;font-size:13px;opacity:.85}
+.route i{flex:0 1 160px;height:0;border-top:2px dashed rgba(226,174,121,.7)}
+.btn{border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.3}
+.btn.primary{background:var(--copper);color:#1b1006}
+.btn.ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor}
+.btn.sea{background:var(--sea);color:var(--sea-ink)}
+.btn.small{padding:6px 12px;font-size:13px}
+.btn.danger{background:transparent;color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
+.btn.danger.armed{background:var(--bad);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+
+section.block{padding-block:48px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.sec-h h2{font-size:24px}
+.sec-h p{color:var(--muted)}
+
+.services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.svc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:8px}
+.svc svg{width:30px;height:30px;color:var(--copper)}
+.svc h3{font-size:17px}
+.svc p{color:var(--muted);font-size:14px}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s;border-top:2px solid var(--line)}
+.steps li{position:relative;padding:22px 0 0 16px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;top:-15px;right:0;width:28px;height:28px;border-radius:50%;background:var(--copper);color:#1b1006;font-weight:700;display:grid;place-items:center;font-size:14px}
+.steps h3{font-size:16px;margin-bottom:4px}
+.steps p{color:var(--muted);font-size:14px}
+
+.contact{background:var(--sunk);border-radius:var(--r);padding:24px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.contact dl{display:flex;gap:28px;flex-wrap:wrap;margin:0}
+.contact dt{font-size:12px;color:var(--muted)}
+.contact dd{margin:0;font-weight:600}
+footer{padding-block:28px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+/* portal */
+.view{padding-block:32px 56px}
+.login{max-width:420px;margin:24px auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:14px}
+.login .head{display:flex;gap:12px;align-items:center}
+.login .head img{width:40px}
+.login h2{font-size:21px}
+.login p{color:var(--muted);font-size:14px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.field input:focus,.field select:focus{border-color:var(--copper);outline:none}
+#codeInput{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:20px;letter-spacing:.12em;text-align:center;direction:ltr;text-transform:uppercase}
+.err{color:var(--bad);font-size:14px;min-height:1.4em}
+.hint{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:8px;padding:10px 12px}
+.hint code{font-family:ui-monospace,Menlo,monospace;direction:ltr;display:inline-block;font-weight:700;color:var(--copper-ink)}
+
+.acct-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.acct-head h2{font-size:26px}
+.acct-head .code{font-family:ui-monospace,Menlo,monospace;color:var(--muted);font-size:13px;direction:ltr;display:inline-block}
+.totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tot{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.tot .k{font-size:13px;color:var(--muted)}
+.tot .v{font-family:var(--display);font-size:clamp(20px,3.4vw,28px);font-weight:700;margin-top:2px}
+.tot.due{background:var(--copper-soft);border-color:transparent}
+.tot.due .v{color:var(--copper-ink)}
+.tot.clear .v{color:var(--good)}
+.meter{margin-top:14px;height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--good);border-radius:99px;transition:width .5s}
+.meter-cap{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
+
+.ledger{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ledger-h{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.ledger-h h3{font-size:17px}
+.filters{display:flex;gap:4px}
+.filters button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row{display:grid;grid-template-columns:96px minmax(0,1fr) 130px 120px;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row.th{font-size:12px;color:var(--muted);background:var(--sunk);padding-block:8px}
+.row .d{font-size:13px;color:var(--muted)}
+.row .t b{font-weight:600;display:block}
+.row .t small{color:var(--muted);font-size:13px}
+.row .amt{font-weight:700;text-align:left}
+.row .bal{text-align:left;font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 8px;border-radius:99px;margin-inline-start:6px;vertical-align:middle}
+.tag.inv{background:var(--copper-soft);color:var(--copper-ink)}
+.tag.pay{background:var(--good-soft);color:var(--good)}
+.amt.inv{color:var(--ink)}
+.amt.pay{color:var(--good)}
+.row .act{grid-column:1/-1;display:flex;justify-content:flex-end}
+.empty{padding:28px 16px;text-align:center;color:var(--muted)}
+.loading{padding:28px 16px;text-align:center;color:var(--muted)}
+
+/* admin */
+.admin-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.panel-h{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.panel-h h3{font-size:16px}
+.panel-b{padding:16px;display:flex;flex-direction:column;gap:12px}
+.clist{max-height:520px;overflow:auto}
+.citem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;background:transparent;border-inline:0;border-top:0;width:100%;text-align:right}
+.citem:hover{background:var(--sunk)}
+.citem[aria-current="true"]{background:var(--copper-soft)}
+.citem b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.citem small{font-family:ui-monospace,Menlo,monospace;color:var(--muted);font-size:12px;direction:ltr;text-align:right}
+.citem .due{font-weight:700;color:var(--copper-ink);font-size:14px}
+.citem .due.zero{color:var(--good)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.form2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.form2 .full{grid-column:1/-1}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px;cursor:pointer;font-weight:600}
+.seg button[aria-pressed="true"].inv{background:var(--copper);color:#1b1006;border-color:var(--copper)}
+.seg button[aria-pressed="true"].pay{background:var(--good);color:#fff;border-color:var(--good)}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline:16px;margin-inline:auto;max-width:360px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;text-align:center;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;z-index:30}
+.toast.on{opacity:1;transform:none}
+.code-chip{display:inline-flex;align-items:center;gap:8px;background:var(--sunk);border-radius:8px;padding:6px 10px;font-family:ui-monospace,Menlo,monospace;font-weight:700;direction:ltr;letter-spacing:.06em}
+.muted{color:var(--muted)}
+.notice{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:8px;padding:10px 12px}
+
+@media (max-width:820px){
+  .admin-grid{grid-template-columns:minmax(0,1fr)}
+  .clist{max-height:300px}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px;border-top:0}
+  .steps li{border-top:2px solid var(--line)}
+}
+@media (max-width:640px){
+  .hero .wrap{grid-template-columns:1fr;padding-block:36px 44px}
+  .hero .pin{order:-1;width:96px}
+  .services{grid-template-columns:minmax(0,1fr)}
+  .totals,.kpis{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .totals .tot.due,.kpis .tot:last-child{grid-column:1/-1}
+  .row{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px}
+  .row.th{display:none}
+  .row .d{grid-column:1/-1;order:-1;font-size:12px}
+  .row .bal{grid-column:2}
+  .form2{grid-template-columns:minmax(0,1fr)}
+  .tabs a{padding:6px 10px;font-size:13px}
+  .brand b{font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.demo-bar{background:var(--copper-soft);color:var(--copper-ink);font-size:13px;font-weight:600}
+.demo-bar .wrap{padding-block:8px}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.foot a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#home"><img src="logo.png" alt=""><b>عبر المحيط</b></a>
+    <nav class="tabs" aria-label="الأقسام">
+      <a href="#home" data-tab="home">الشركة</a>
+      <a href="#portal" data-tab="portal">حسابي</a>
+      <a href="#admin" data-tab="admin" id="adminTab" hidden>الإدارة</a>
+    </nav>
+  </div>
+</header>
+<div class="demo-bar" id="demoBar" hidden><div class="wrap">نسخة تجريبية: البيانات تنحفظ على هذا الجهاز فقط لين يتم ربط قاعدة البيانات.</div></div>
+
+<!-- ============ COMPANY ============ -->
+<main id="v-home">
+  <div class="hero">
+    <canvas id="waves" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">عبر المحيط لاستيراد السيارات</div>
+        <h1>سيارتك من أمريكا<br><span>لين باب حوشك</span></h1>
+        <p class="lead">نشتري لك السيارة من المزادات والمعارض الأمريكية، نشحنها بحراً، ونتابع التخليص لين تستلمها. وكل حسابك معانا واضح قدامك أول بأول.</p>
+        <div class="cta">
+          <a class="btn primary" href="#portal">الدخول لحسابي</a>
+          <a class="btn ghost" href="#contact">تواصل معانا</a>
+        </div>
+        <div class="route"><span>الولايات المتحدة</span><i></i><span>ليبيا</span></div>
+      </div>
+      <img class="pin" src="logo.png" alt="شعار عبر المحيط">
+    </div>
+  </div>
+
+  <section class="block wrap">
+    <div class="sec-h"><h2>شن نديرولك</h2></div>
+    <div class="services">
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4l6 6M12 6l6 6M4 20l8-8M11 7l6 6-3 3-6-6z"/></svg>
+        <h3>الشراء من المزادات</h3>
+        <p>نبحثو على السيارة اللي تبيها، نراجعو تقرير حالتها ورقم الشاصي، ونزايدو عليها بالميزانية اللي تحددها.</p>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l2 3h14l2-3M5 17V11h14v6M8 11V7h8v4M12 3v4"/><path d="M2 21c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"/></svg>
+        <h3>الشحن البحري</h3>
+        <p>نقل داخلي للميناء الأمريكي، تحميل في حاوية أو رورو، ومتابعة الباخرة لين توصل.</p>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>
+        <h3>التخليص والتسليم</h3>
+        <p>إجراءات الجمارك والأوراق، وفاتورة لكل خدمة تنزل في حسابك أول ما تتسجل.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" style="padding-top:8px">
+    <div class="sec-h"><h2>مراحل الطلب</h2><p>من اختيار السيارة لين الاستلام</p></div>
+    <ol class="steps">
+      <li><h3>اختيار السيارة</h3><p>تحدد الموديل والميزانية، ونرسلولك خيارات من المزادات.</p></li>
+      <li><h3>الشراء والدفعة الأولى</h3><p>بعد الفوز بالمزاد تنزل فاتورة ثمن السيارة في حسابك.</p></li>
+      <li><h3>الشحن</h3><p>فاتورة النقل والشحن، وتتابع وين وصلت سيارتك.</p></li>
+      <li><h3>التخليص والاستلام</h3><p>تسدد المتبقي وتستلم سيارتك جاهزة.</p></li>
+    </ol>
+  </section>
+
+  <section class="block wrap" id="contact" style="padding-top:8px">
+    <div class="contact">
+      <div>
+        <h2 style="font-size:20px">عميل عندنا؟</h2>
+        <p class="muted">ادخل بالكود اللي عطيناهولك وشوف فواتيرك ومدفوعاتك والمتبقي عليك.</p>
+      </div>
+      <dl id="contactList"></dl>
+      <a class="btn sea" href="#portal">الدخول بالكود</a>
+    </div>
+  </section>
+  <footer><div class="wrap foot">© <span id="yr"></span> عبر المحيط لاستيراد السيارات<a href="#admin">دخول الإدارة</a></div></footer>
+</main>
+
+<!-- ============ CLIENT PORTAL ============ -->
+<main id="v-portal" class="view" hidden>
+  <div class="wrap">
+    <form class="login" id="loginForm" novalidate>
+      <div class="head"><img src="logo.png" alt=""><div><h2>حساب العميل</h2><p>اكتب الكود اللي عطتهولك الشركة</p></div></div>
+      <div class="field">
+        <label for="codeInput">كود العميل</label>
+        <input id="codeInput" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="OC-XXXXXX" maxlength="20">
+      </div>
+      <div class="err" id="loginErr" role="alert"></div>
+      <button class="btn primary" type="submit" id="loginBtn" style="justify-content:center">دخول</button>
+      <div class="hint" id="demoHint" hidden>للتجربة: <code>DEMO-1001</code> أو <code>DEMO-1002</code></div>
+    </form>
+
+    <div id="acct" hidden>
+      <div class="acct-head">
+        <div>
+          <p class="muted">مرحبا</p>
+          <h2 id="acctName"></h2>
+          <span class="code" id="acctCode"></span>
+        </div>
+        <div style="display:flex;gap:6px"><button class="btn ghost small" id="refreshBtn" type="button">تحديث</button><button class="btn ghost small" id="logoutBtn" type="button">خروج</button></div>
+      </div>
+      <div class="totals">
+        <div class="tot"><div class="k">إجمالي الفواتير</div><div class="v"><span class="num" id="tInv">—</span></div></div>
+        <div class="tot"><div class="k">المدفوع</div><div class="v"><span class="num" id="tPay">—</span></div></div>
+        <div class="tot due" id="tDueBox"><div class="k" id="tDueLbl">المتبقي عليك</div><div class="v"><span class="num" id="tDue">—</span></div></div>
+      </div>
+      <div class="meter"><i id="meter" style="width:0%"></i></div>
+      <div class="meter-cap"><span id="meterCap">—</span><span id="lastPay"></span></div>
+
+      <div class="ledger">
+        <div class="ledger-h">
+          <h3>كشف الحساب</h3>
+          <div class="filters" role="group" aria-label="تصفية">
+            <button type="button" data-f="all" aria-pressed="true">الكل</button>
+            <button type="button" data-f="inv" aria-pressed="false">الفواتير</button>
+            <button type="button" data-f="pay" aria-pressed="false">المدفوعات</button>
+          </div>
+        </div>
+        <div id="ledgerRows"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ ADMIN ============ -->
+<main id="v-admin" class="view" hidden>
+  <div class="wrap">
+    <form class="login" id="adminLogin" novalidate>
+      <div class="head"><img src="logo.png" alt=""><div><h2>دخول الإدارة</h2><p>خاص بموظفي الشركة</p></div></div>
+      <div class="field" id="aEmailWrap"><label for="aEmail">الإيميل</label><input id="aEmail" type="email" dir="ltr" autocomplete="username"></div>
+      <div class="field" id="aPassWrap"><label for="aPass">كلمة المرور</label><input id="aPass" type="password" dir="ltr" autocomplete="current-password"></div>
+      <p class="hint" id="adminDemoNote" hidden>في النسخة التجريبية تدخل مباشرة بدون كلمة مرور.</p>
+      <div class="err" id="aErr" role="alert"></div>
+      <button class="btn primary" type="submit" id="aBtn" style="justify-content:center">دخول</button>
+    </form>
+    <div id="adminApp" hidden>
+    <div class="sec-h"><h2>لوحة الإدارة</h2><button class="btn ghost small" type="button" id="adminOut">تسجيل خروج</button></div>
+    <div class="kpis">
+      <div class="tot"><div class="k">عدد العملاء</div><div class="v"><span class="num" id="kClients">0</span></div></div>
+      <div class="tot"><div class="k">إجمالي الفواتير</div><div class="v"><span class="num" id="kInv">0</span></div></div>
+      <div class="tot due"><div class="k">ديون مستحقة على العملاء</div><div class="v"><span class="num" id="kDue">0</span></div></div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="panel">
+        <div class="panel-h"><h3>العملاء</h3><button class="btn primary small" id="newClientBtn" type="button">+ عميل جديد</button></div>
+        <div class="panel-b" style="padding-bottom:0"><div class="field"><input id="clientSearch" placeholder="ابحث بالاسم أو الكود" aria-label="بحث"></div></div>
+        <div class="clist" id="clientList"><div class="empty">لا يوجد عملاء بعد. أضف أول عميل من زر «عميل جديد».</div></div>
+      </div>
+
+      <div id="detail">
+        <!-- new client -->
+        <form class="panel" id="clientForm" hidden novalidate>
+          <div class="panel-h"><h3 id="clientFormTitle">عميل جديد</h3><button class="btn ghost small" type="button" id="cancelClient">إلغاء</button></div>
+          <div class="panel-b">
+            <div class="form2">
+              <div class="field full"><label for="cName">اسم العميل</label><input id="cName" required></div>
+              <div class="field"><label for="cPhone">رقم الهاتف</label><input id="cPhone" inputmode="tel" dir="ltr"></div>
+              <div class="field"><label for="cCode">كود الدخول</label><input id="cCode" dir="ltr" style="font-family:ui-monospace,monospace;text-transform:uppercase"></div>
+              <div class="field full"><label for="cNote">ملاحظات</label><input id="cNote"></div>
+            </div>
+            <div class="err" id="clientErr"></div>
+            <div><button class="btn primary" type="submit" id="saveClientBtn">حفظ العميل</button></div>
+          </div>
+        </form>
+
+        <!-- selected client -->
+        <div id="clientDetail" hidden>
+          <div class="panel" style="margin-bottom:16px">
+            <div class="panel-h">
+              <div><h3 id="dName"></h3><span class="muted" id="dPhone" dir="ltr"></span></div>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <span class="code-chip" id="dCode"></span>
+                <button class="btn ghost small" type="button" id="copyCode">نسخ الكود</button>
+                <button class="btn ghost small" type="button" id="editClient">تعديل</button>
+              </div>
+            </div>
+            <div class="panel-b">
+              <div class="totals">
+                <div class="tot"><div class="k">الفواتير</div><div class="v"><span class="num" id="dInv">0</span></div></div>
+                <div class="tot"><div class="k">المدفوع</div><div class="v"><span class="num" id="dPay">0</span></div></div>
+                <div class="tot due"><div class="k">المتبقي</div><div class="v"><span class="num" id="dDue">0</span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <form class="panel" id="entryForm" novalidate style="margin-bottom:16px">
+            <div class="panel-h"><h3>إضافة حركة</h3></div>
+            <div class="panel-b">
+              <div class="seg" role="group" aria-label="نوع الحركة">
+                <button type="button" class="inv" data-kind="inv" aria-pressed="true">فاتورة خدمة</button>
+                <button type="button" class="pay" data-kind="pay" aria-pressed="false">دفعة من العميل</button>
+              </div>
+              <div class="form2">
+                <div class="field full" id="fTypeWrap"><label for="eType">نوع الخدمة</label>
+                  <select id="eType">
+                    <option>ثمن السيارة</option><option>رسوم المزاد</option><option>النقل الداخلي في أمريكا</option>
+                    <option>الشحن البحري</option><option>التخليص الجمركي</option><option>رسوم الشركة</option><option>أخرى</option>
+                  </select></div>
+                <div class="field full" id="fMethodWrap" hidden><label for="eMethod">طريقة الدفع</label>
+                  <select id="eMethod"><option>نقداً</option><option>تحويل مصرفي</option><option>صك</option></select></div>
+                <div class="field full"><label for="eCar">السيارة</label><input id="eCar" placeholder="مثال: تويوتا كامري 2021"></div>
+                <div class="field"><label for="eVin">رقم الشاصي (VIN)</label><input id="eVin" dir="ltr" maxlength="17" style="text-transform:uppercase;font-family:ui-monospace,monospace"></div>
+                <div class="field"><label for="eAmount">المبلغ (<span class="curLbl"></span>)</label><input id="eAmount" inputmode="decimal" dir="ltr"></div>
+                <div class="field"><label for="eDate">التاريخ</label><input id="eDate" type="date" dir="ltr"></div>
+                <div class="field"><label for="eNote">ملاحظة</label><input id="eNote"></div>
+              </div>
+              <div class="err" id="entryErr"></div>
+              <div><button class="btn primary" type="submit" id="saveEntryBtn">إضافة الفاتورة</button></div>
+            </div>
+          </form>
+
+          <div class="ledger" style="margin-top:0">
+            <div class="ledger-h"><h3>كشف حساب العميل</h3></div>
+            <div id="adminLedger"></div>
+          </div>
+        </div>
+
+        <div class="panel" id="noSel">
+          <div class="panel-b"><p class="muted">اختر عميلاً من القائمة لعرض كشف حسابه وإضافة فواتير أو دفعات، أو أضف عميلاً جديداً.</p></div>
+        </div>
+
+        <form class="panel" id="settingsForm" novalidate style="margin-top:16px">
+          <div class="panel-h"><h3>بيانات الشركة</h3></div>
+          <div class="panel-b">
+            <div class="form2">
+              <div class="field"><label for="sCur">رمز العملة</label><input id="sCur" placeholder="د.ل أو $"></div>
+              <div class="field"><label for="sPhone">رقم الهاتف</label><input id="sPhone" dir="ltr" inputmode="tel"></div>
+              <div class="field"><label for="sWa">واتساب</label><input id="sWa" dir="ltr" inputmode="tel"></div>
+              <div class="field"><label for="sAddr">العنوان</label><input id="sAddr"></div>
+            </div>
+            <div><button class="btn sea" type="submit">حفظ البيانات</button></div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let settings={currency:'د.ل',phone:'',whatsapp:'',address:''};
+const fmt=n=>{const v=Math.round((+n||0)*100)/100;return v.toLocaleString('en-US',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2})+' '+settings.currency};
+const dfmt=d=>{if(!d)return '';const [y,m,dd]=String(d).slice(0,10).split('-');return `${dd}/${m}/${y}`};
+const today=()=>{const t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')};
+const ts=v=>typeof v==='number'?v:(Date.parse(v)||0);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2400)}
+$('#yr').textContent=new Date().getFullYear();
+
+/* =========================================================
+   Data layer: Supabase when configured, otherwise a local demo
+   ========================================================= */
+const CFG=window.ABR_CONFIG||{};
+const LIVE=!!(CFG.SUPABASE_URL&&CFG.SUPABASE_ANON_KEY&&window.supabase);
+let api;
+
+if(LIVE){
+  const sb=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
+  const norm=r=>({...r,amount:+r.amount,clientCode:r.client_code,createdAt:r.created_at});
+  const chk=({data,error})=>{if(error)throw error;return data};
+  api={
+    async settings(){const d=chk(await sb.from('settings').select('*').eq('id',1).maybeSingle());return d||{}},
+    async saveSettings(s){chk(await sb.from('settings').upsert({id:1,...s}))},
+    async statement(code){const d=chk(await sb.rpc('client_statement',{p_code:code}));
+      if(!d)return null;return{name:d.name,code:d.code,invoices:(d.invoices||[]).map(norm),payments:(d.payments||[]).map(norm)}},
+    async session(){const {data}=await sb.auth.getSession();return data.session?{email:data.session.user.email}:null},
+    async signIn(email,password){const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error},
+    async signOut(){await sb.auth.signOut()},
+    async isAdmin(){const d=chk(await sb.rpc('is_admin'));return !!d},
+    async all(){
+      const [c,i,p]=await Promise.all([sb.from('clients').select('*'),sb.from('invoices').select('*'),sb.from('payments').select('*')]);
+      return{clients:chk(c).map(r=>({...r,createdAt:r.created_at})),invoices:chk(i).map(norm),payments:chk(p).map(norm)}},
+    async saveClient(c,isNew){
+      const row={code:c.code,name:c.name,phone:c.phone,note:c.note};
+      if(isNew)chk(await sb.from('clients').insert(row));
+      else chk(await sb.from('clients').update({name:c.name,phone:c.phone,note:c.note}).eq('code',c.code))},
+    async addEntry(kind,d){
+      const row={client_code:d.clientCode,amount:d.amount,date:d.date,car:d.car,vin:d.vin,note:d.note};
+      if(kind==='inv')row.type=d.type;else row.method=d.method;
+      chk(await sb.from(kind==='inv'?'invoices':'payments').insert(row))},
+    async delEntry(kind,id){chk(await sb.from(kind==='inv'?'invoices':'payments').delete().eq('id',id))}
+  };
+}else{
+  const KEY='abr_demo_v1';
+  const seed=()=>({
+    settings:{currency:'د.ل',phone:'',whatsapp:'',address:''},
+    clients:[{code:'DEMO-1001',name:'عميل تجريبي 1',phone:'',note:'بيانات للتجربة',createdAt:1},{code:'DEMO-1002',name:'عميل تجريبي 2',phone:'',note:'بيانات للتجربة',createdAt:2}],
+    invoices:[
+      {id:'i1',clientCode:'DEMO-1001',type:'ثمن السيارة',car:'مثال: تويوتا كامري 2021',vin:'',amount:42000,date:'2026-08-04',note:'مثال',createdAt:10},
+      {id:'i2',clientCode:'DEMO-1001',type:'الشحن البحري',car:'مثال: تويوتا كامري 2021',vin:'',amount:6500,date:'2026-08-20',note:'مثال',createdAt:11},
+      {id:'i3',clientCode:'DEMO-1001',type:'التخليص الجمركي',car:'مثال: تويوتا كامري 2021',vin:'',amount:3800,date:'2026-09-28',note:'مثال',createdAt:12},
+      {id:'i4',clientCode:'DEMO-1002',type:'ثمن السيارة',car:'مثال: هيونداي سوناتا 2020',vin:'',amount:28000,date:'2026-07-12',note:'مثال',createdAt:13}],
+    payments:[
+      {id:'p1',clientCode:'DEMO-1001',method:'نقداً',car:'',vin:'',amount:30000,date:'2026-08-05',note:'مثال',createdAt:20},
+      {id:'p2',clientCode:'DEMO-1001',method:'تحويل مصرفي',car:'',vin:'',amount:10000,date:'2026-09-10',note:'مثال',createdAt:21},
+      {id:'p3',clientCode:'DEMO-1002',method:'نقداً',car:'',vin:'',amount:28000,date:'2026-07-30',note:'مثال',createdAt:22}]
+  });
+  let mem=null;
+  const load=()=>{if(mem)return mem;try{mem=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!mem||!mem.clients)mem=seed();return mem};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}};
+  let demoSession=null;try{demoSession=sessionStorage.getItem('abr_demo_admin')?{email:'demo'}:null}catch(e){}
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  api={
+    async settings(){return clone(load().settings)},
+    async saveSettings(s){load().settings=s;save()},
+    async statement(code){const db=load();const c=db.clients.find(x=>x.code===code);if(!c)return null;
+      return{name:c.name,code:c.code,invoices:clone(db.invoices.filter(x=>x.clientCode===code)),payments:clone(db.payments.filter(x=>x.clientCode===code))}},
+    async session(){return demoSession},
+    async signIn(){demoSession={email:'demo'};try{sessionStorage.setItem('abr_demo_admin','1')}catch(e){}},
+    async signOut(){demoSession=null;try{sessionStorage.removeItem('abr_demo_admin')}catch(e){}},
+    async isAdmin(){return !!demoSession},
+    async all(){const db=load();return clone({clients:db.clients,invoices:db.invoices,payments:db.payments})},
+    async saveClient(c,isNew){const db=load();
+      if(isNew){if(db.clients.some(x=>x.code===c.code))throw{code:'23505'};db.clients.push({...c,createdAt:Date.now()})}
+      else Object.assign(db.clients.find(x=>x.code===c.code),{name:c.name,phone:c.phone,note:c.note});save()},
+    async addEntry(kind,d){const db=load();(kind==='inv'?db.invoices:db.payments).push({...d,id:Math.random().toString(36).slice(2),createdAt:Date.now()});save()},
+    async delEntry(kind,id){const db=load();const k=kind==='inv'?'invoices':'payments';db[k]=db[k].filter(x=>x.id!==id);save()}
+  };
+  $('#demoBar').hidden=false;
+  $('#demoHint').hidden=false;
+  $('#adminDemoNote').hidden=false;
+}
+
+/* ---------- routing ---------- */
+let isAdmin=false;
+function route(){
+  let tab=(location.hash||'#home').slice(1);
+  if(tab==='contact')tab='home';
+  if(!['home','portal','admin'].includes(tab))tab='home';
+  ['home','portal','admin'].forEach(v=>$('#v-'+v).hidden=v!==tab);
+  $$('.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===tab?'page':'false'));
+  if(tab==='admin')enterAdmin();
+  if(location.hash==='#contact')$('#contact').scrollIntoView();else window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+
+/* ---------- ledger helpers ---------- */
+function buildLedger(invs,pays){
+  const rows=[...invs.map(d=>({...d,kind:'inv'})),...pays.map(d=>({...d,kind:'pay'}))];
+  rows.sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))||(ts(a.createdAt)-ts(b.createdAt)));
+  let bal=0;rows.forEach(r=>{bal+=r.kind==='inv'?+r.amount:-r.amount;r.bal=bal});
+  return rows;
+}
+function sums(invs,pays){const i=invs.reduce((s,d)=>s+(+d.amount||0),0),p=pays.reduce((s,d)=>s+(+d.amount||0),0);return{i,p,due:i-p}}
+function rowHTML(r,withDelete){
+  const title=r.kind==='inv'?(r.type||'فاتورة'):('دفعة'+(r.method?' — '+r.method:''));
+  const sub=[r.car,r.vin?('VIN '+r.vin):'',r.note].filter(Boolean).map(esc).join(' · ');
+  return `<div class="row">
+    <div class="d"><span class="num">${esc(dfmt(r.date))}</span></div>
+    <div class="t"><b>${esc(title)}<span class="tag ${r.kind}">${r.kind==='inv'?'فاتورة':'مدفوع'}</span></b>${sub?`<small>${sub}</small>`:''}</div>
+    <div class="amt ${r.kind}"><span class="num">${r.kind==='pay'?'− ':''}${esc(fmt(r.amount))}</span></div>
+    <div class="bal">الرصيد <span class="num">${esc(fmt(r.bal))}</span></div>
+    ${withDelete?`<div class="act"><button type="button" class="btn danger small" data-del="${r.kind}:${esc(r.id)}">حذف</button></div>`:''}
+  </div>`;
+}
+const TH=`<div class="row th"><div>التاريخ</div><div>البيان</div><div style="text-align:left">المبلغ</div><div style="text-align:left">الرصيد بعدها</div></div>`;
+
+/* ---------- client portal ---------- */
+let pInv=[],pPay=[],pFilter='all',pCode=null;
+function renderPortal(){
+  const {i,p,due}=sums(pInv,pPay);
+  $('#tInv').textContent=fmt(i);$('#tPay').textContent=fmt(p);
+  const clear=due<=0.005;
+  $('#tDueBox').classList.toggle('clear',clear);$('#tDueBox').classList.toggle('due',!clear);
+  $('#tDueLbl').textContent=due< -0.005?'رصيد لك عند الشركة':(clear?'حسابك مسدد بالكامل':'المتبقي عليك');
+  $('#tDue').textContent=fmt(Math.abs(due)<0.005?0:Math.abs(due));
+  const pct=i>0?Math.min(100,Math.round(p/i*100)):0;
+  $('#meter').style.width=pct+'%';$('#meterCap').textContent=i>0?`سددت ${pct}٪ من إجمالي الفواتير`:'لا توجد فواتير بعد';
+  const lastP=[...pPay].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))[0];
+  $('#lastPay').textContent=lastP?('آخر دفعة: '+dfmt(lastP.date)):'';
+  let rows=buildLedger(pInv,pPay);
+  if(pFilter!=='all')rows=rows.filter(r=>r.kind===pFilter);
+  rows.reverse();
+  $('#ledgerRows').innerHTML=rows.length?TH+rows.map(r=>rowHTML(r,false)).join(''):'<div class="empty">لا توجد حركات في حسابك حتى الآن.</div>';
+}
+$$('.filters button').forEach(b=>b.addEventListener('click',()=>{pFilter=b.dataset.f;$$('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderPortal()}));
+
+async function login(code,silent){
+  code=String(code||'').trim().toUpperCase();
+  if(!code){$('#loginErr').textContent='اكتب كود العميل.';return}
+  if(!/^[A-Z0-9-]{3,20}$/.test(code)){$('#loginErr').textContent='الكود غير صحيح. تأكد منه وحاول مرة ثانية.';return}
+  $('#loginBtn').disabled=true;$('#loginErr').textContent='';
+  try{
+    const s=await api.statement(code);
+    if(!s){if(!silent)$('#loginErr').textContent='الكود غير صحيح. تأكد منه أو تواصل مع الشركة.';try{sessionStorage.removeItem('abr_code')}catch(e){}return}
+    pCode=code;pInv=s.invoices;pPay=s.payments;
+    $('#acctName').textContent=s.name||'';$('#acctCode').textContent=code;
+    $('#loginForm').hidden=true;$('#acct').hidden=false;
+    try{sessionStorage.setItem('abr_code',code)}catch(e){}
+    renderPortal();
+  }catch(e){console.warn(e);$('#loginErr').textContent='تعذر الاتصال. تأكد من الإنترنت وحاول مرة ثانية.'}
+  finally{$('#loginBtn').disabled=false}
+}
+$('#loginForm').addEventListener('submit',e=>{e.preventDefault();login($('#codeInput').value)});
+$('#refreshBtn').addEventListener('click',()=>{if(pCode)login(pCode).then(()=>toast('تم تحديث الحساب'))});
+$('#logoutBtn').addEventListener('click',()=>{pCode=null;try{sessionStorage.removeItem('abr_code')}catch(e){}
+  $('#acct').hidden=true;$('#loginForm').hidden=false;$('#codeInput').value='';$('#codeInput').focus()});
+
+/* ---------- settings / contact ---------- */
+function renderSettings(){
+  $$('.curLbl').forEach(e=>e.textContent=settings.currency);
+  const items=[['الهاتف',settings.phone],['واتساب',settings.whatsapp],['العنوان',settings.address]].filter(x=>x[1]);
+  $('#contactList').innerHTML=items.map(([k,v])=>`<div><dt>${k}</dt><dd${k!=='العنوان'?' dir="ltr"':''}>${esc(v)}</dd></div>`).join('');
+  $('#sCur').value=settings.currency||'';$('#sPhone').value=settings.phone||'';$('#sWa').value=settings.whatsapp||'';$('#sAddr').value=settings.address||'';
+}
+$('#settingsForm').addEventListener('submit',async e=>{e.preventDefault();
+  const next={currency:$('#sCur').value.trim()||'د.ل',phone:$('#sPhone').value.trim(),whatsapp:$('#sWa').value.trim(),address:$('#sAddr').value.trim()};
+  try{await api.saveSettings(next);settings={...settings,...next};renderSettings();renderAdmin();toast('تم حفظ بيانات الشركة')}catch(err){console.warn(err);toast('تعذر الحفظ')}
+});
+
+/* ---------- admin ---------- */
+let aClients=[],aInv=[],aPay=[],selCode=null,kind='inv',editing=false;
+async function enterAdmin(){
+  const s=await api.session().catch(()=>null);
+  if(!s){showAdminLogin();return}
+  try{isAdmin=await api.isAdmin()}catch(e){isAdmin=false}
+  if(!isAdmin){showAdminLogin('هذا الحساب ما عندهش صلاحية الإدارة.');await api.signOut();return}
+  $('#adminLogin').hidden=true;$('#adminApp').hidden=false;$('#adminTab').hidden=false;
+  await reloadAdmin();
+}
+function showAdminLogin(msg){$('#adminApp').hidden=true;$('#adminLogin').hidden=false;$('#adminTab').hidden=true;$('#aErr').textContent=msg||'';
+  $('#aEmailWrap').hidden=!LIVE;$('#aPassWrap').hidden=!LIVE}
+$('#adminLogin').addEventListener('submit',async e=>{e.preventDefault();
+  $('#aBtn').disabled=true;$('#aErr').textContent='';
+  try{await api.signIn($('#aEmail').value.trim(),$('#aPass').value);$('#aPass').value='';await enterAdmin()}
+  catch(err){$('#aErr').textContent='الإيميل أو كلمة المرور غير صحيحة.'}
+  finally{$('#aBtn').disabled=false}
+});
+$('#adminOut').addEventListener('click',async()=>{await api.signOut();isAdmin=false;showAdminLogin();location.hash='#home'});
+async function reloadAdmin(){
+  try{const d=await api.all();aClients=d.clients;aInv=d.invoices;aPay=d.payments;renderAdmin()}
+  catch(e){console.warn(e);toast('تعذر تحميل البيانات')}
+}
+function dueOf(code){return sums(aInv.filter(x=>x.clientCode===code),aPay.filter(x=>x.clientCode===code))}
+function renderAdmin(){
+  const tot=sums(aInv,aPay);
+  $('#kClients').textContent=aClients.length;$('#kInv').textContent=fmt(tot.i);
+  $('#kDue').textContent=fmt(aClients.reduce((s,c)=>s+Math.max(0,dueOf(c.code).due),0));
+  const q=$('#clientSearch').value.trim().toUpperCase();
+  const list=aClients.map(c=>({...c,...dueOf(c.code)}))
+    .filter(c=>!q||(c.name||'').toUpperCase().includes(q)||c.code.includes(q)||(c.phone||'').includes(q))
+    .sort((a,b)=>b.due-a.due||(a.name||'').localeCompare(b.name||'','ar'));
+  $('#clientList').innerHTML=list.length?list.map(c=>`<button type="button" class="citem" data-code="${esc(c.code)}" aria-current="${c.code===selCode}">
+      <b>${esc(c.name)}</b><span class="due num ${c.due<=0.005?'zero':''}">${c.due<=0.005?'مسدد':esc(fmt(c.due))}</span>
+      <small>${esc(c.code)}</small></button>`).join('')
+    :`<div class="empty">${aClients.length?'لا نتائج للبحث.':'لا يوجد عملاء بعد. أضف أول عميل من زر «عميل جديد».'}</div>`;
+  renderDetail();
+}
+function renderDetail(){
+  const c=aClients.find(x=>x.code===selCode);
+  const showForm=!$('#clientForm').hidden;
+  $('#clientDetail').hidden=!c||showForm;$('#noSel').hidden=!!c||showForm;
+  if(!c)return;
+  $('#dName').textContent=c.name;$('#dPhone').textContent=c.phone||'';$('#dCode').textContent=c.code;
+  const invs=aInv.filter(x=>x.clientCode===c.code),pays=aPay.filter(x=>x.clientCode===c.code);
+  const s=sums(invs,pays);
+  $('#dInv').textContent=fmt(s.i);$('#dPay').textContent=fmt(s.p);$('#dDue').textContent=fmt(s.due);
+  const rows=buildLedger(invs,pays).reverse();
+  $('#adminLedger').innerHTML=rows.length?TH+rows.map(r=>rowHTML(r,true)).join(''):'<div class="empty">لا توجد حركات. أضف أول فاتورة من النموذج فوق.</div>';
+}
+$('#clientSearch').addEventListener('input',renderAdmin);
+$('#clientList').addEventListener('click',e=>{const b=e.target.closest('.citem');if(!b)return;selCode=b.dataset.code;$('#clientForm').hidden=true;renderAdmin();
+  if(innerWidth<820)$('#detail').scrollIntoView({behavior:'smooth'})});
+
+function genCode(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='OC-';const r=crypto.getRandomValues(new Uint32Array(8));for(const n of r)s+=A[n%A.length];return s}
+$('#newClientBtn').addEventListener('click',()=>{editing=false;$('#clientFormTitle').textContent='عميل جديد';
+  $('#cName').value='';$('#cPhone').value='';$('#cNote').value='';$('#cCode').value=genCode();$('#cCode').disabled=false;$('#clientErr').textContent='';
+  $('#clientForm').hidden=false;renderDetail();$('#cName').focus()});
+$('#editClient').addEventListener('click',()=>{const c=aClients.find(x=>x.code===selCode);if(!c)return;editing=true;
+  $('#clientFormTitle').textContent='تعديل بيانات العميل';$('#cName').value=c.name||'';$('#cPhone').value=c.phone||'';$('#cNote').value=c.note||'';
+  $('#cCode').value=c.code;$('#cCode').disabled=true;$('#clientErr').textContent='';$('#clientForm').hidden=false;renderDetail()});
+$('#cancelClient').addEventListener('click',()=>{$('#clientForm').hidden=true;renderDetail()});
+$('#clientForm').addEventListener('submit',async e=>{e.preventDefault();
+  const name=$('#cName').value.trim(),code=$('#cCode').value.trim().toUpperCase();
+  if(!name){$('#clientErr').textContent='اكتب اسم العميل.';return}
+  if(!/^[A-Z0-9-]{3,20}$/.test(code)){$('#clientErr').textContent='الكود لازم يكون حروف إنجليزية وأرقام وشرطة فقط (3 إلى 20 خانة).';return}
+  if(!editing&&aClients.some(c=>c.code===code)){$('#clientErr').textContent='هذا الكود مستخدم لعميل آخر.';return}
+  $('#saveClientBtn').disabled=true;
+  try{
+    await api.saveClient({code,name,phone:$('#cPhone').value.trim(),note:$('#cNote').value.trim()},!editing);
+    selCode=code;$('#clientForm').hidden=true;toast(editing?'تم تعديل بيانات العميل':'تمت إضافة العميل — الكود '+code);await reloadAdmin();
+  }catch(err){console.warn(err);$('#clientErr').textContent=err?.code==='23505'?'هذا الكود مستخدم لعميل آخر.':'تعذر الحفظ. حاول مرة ثانية.'}
+  finally{$('#saveClientBtn').disabled=false}
+});
+$('#copyCode').addEventListener('click',()=>{const t=selCode;
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents($('#dCode'));getSelection().removeAllRanges();getSelection().addRange(r);toast('حدد الكود وانسخه')};
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('تم نسخ الكود'),fallback);else fallback()});
+
+$$('.seg button').forEach(b=>b.addEventListener('click',()=>{kind=b.dataset.kind;$$('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $('#fTypeWrap').hidden=kind!=='inv';$('#fMethodWrap').hidden=kind!=='pay';
+  $('#saveEntryBtn').textContent=kind==='inv'?'إضافة الفاتورة':'تسجيل الدفعة'}));
+$('#eDate').value=today();
+$('#entryForm').addEventListener('submit',async e=>{e.preventDefault();
+  if(!selCode)return;
+  const amount=parseFloat(String($('#eAmount').value).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[,٬]/g,'').replace('٫','.'));
+  if(!(amount>0)){$('#entryErr').textContent='اكتب مبلغ صحيح أكبر من صفر.';return}
+  const d={clientCode:selCode,amount,date:$('#eDate').value||today(),car:$('#eCar').value.trim(),vin:$('#eVin').value.trim().toUpperCase(),note:$('#eNote').value.trim()};
+  if(kind==='inv')d.type=$('#eType').value;else d.method=$('#eMethod').value;
+  $('#saveEntryBtn').disabled=true;$('#entryErr').textContent='';
+  try{await api.addEntry(kind,d);
+    toast(kind==='inv'?'تمت إضافة الفاتورة':'تم تسجيل الدفعة');$('#eAmount').value='';$('#eNote').value='';await reloadAdmin();
+  }catch(err){console.warn(err);$('#entryErr').textContent='تعذر الحفظ. حاول مرة ثانية.'}
+  finally{$('#saveEntryBtn').disabled=false}
+});
+$('#adminLedger').addEventListener('click',async e=>{const b=e.target.closest('[data-del]');if(!b)return;
+  if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='تأكيد الحذف';setTimeout(()=>{if(b.isConnected){b.classList.remove('armed');b.textContent='حذف'}},4000);return}
+  const [k,id]=b.dataset.del.split(':');b.disabled=true;
+  try{await api.delEntry(k,id);toast('تم الحذف');await reloadAdmin()}catch(err){console.warn(err);toast('تعذر الحذف');b.disabled=false}
+});
+
+/* ---------- waves ---------- */
+(function(){const c=$('#waves');if(!c)return;const x=c.getContext('2d');let w,h,t=0;
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){const r=c.getBoundingClientRect();w=c.width=r.width*devicePixelRatio;h=c.height=r.height*devicePixelRatio}
+  function draw(){x.clearRect(0,0,w,h);x.lineWidth=1*devicePixelRatio;
+    for(let i=0;i<9;i++){const y0=h*(.35+i*.08);x.strokeStyle=`rgba(180,220,235,${.05+i*.012})`;x.beginPath();
+      for(let px=0;px<=w;px+=8*devicePixelRatio){const y=y0+Math.sin(px/(90*devicePixelRatio)+t+i*.7)*6*devicePixelRatio+Math.sin(px/(37*devicePixelRatio)-t*1.3+i)*2*devicePixelRatio;px?x.lineTo(px,y):x.moveTo(px,y)}
+      x.stroke()}
+    t+=.008}
+  let on=false;function loop(){if($('#v-home').hidden||rm){on=false;return}draw();requestAnimationFrame(loop)}
+  function kick(){if(rm){draw();return}if(!on){on=true;requestAnimationFrame(loop)}}
+  size();draw();kick();addEventListener('resize',()=>{size();draw()});addEventListener('hashchange',kick);
+})();
+
+/* ---------- boot ---------- */
+(async()=>{
+  try{settings={...settings,...await api.settings()}}catch(e){console.warn(e)}
+  renderSettings();
+  try{const s=await api.session();if(s){isAdmin=await api.isAdmin();$('#adminTab').hidden=!isAdmin}}catch(e){}
+  try{const saved=sessionStorage.getItem('abr_code');if(saved)login(saved,true)}catch(e){}
+})();
+route();
+})();
+</script>
+</body>
+</html>
