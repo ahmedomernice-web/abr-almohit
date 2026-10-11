@@ -444,7 +444,6 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
 <div class="toast" id="toast" role="status"></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -461,36 +460,34 @@ $('#yr').textContent=new Date().getFullYear();
    Data layer: Supabase when configured, otherwise a local demo
    ========================================================= */
 const CFG=window.ABR_CONFIG||{};
-const LIVE=!!(CFG.SUPABASE_URL&&CFG.SUPABASE_ANON_KEY&&window.supabase);
+let LIVE=false;
 let api;
-
-if(LIVE){
-  const sb=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
-  const norm=r=>({...r,amount:+r.amount,clientCode:r.client_code,createdAt:r.created_at});
-  const chk=({data,error})=>{if(error)throw error;return data};
-  api={
-    async settings(){const d=chk(await sb.from('settings').select('*').eq('id',1).maybeSingle());return d||{}},
-    async saveSettings(s){chk(await sb.from('settings').upsert({id:1,...s}))},
-    async statement(code){const d=chk(await sb.rpc('client_statement',{p_code:code}));
-      if(!d)return null;return{name:d.name,code:d.code,invoices:(d.invoices||[]).map(norm),payments:(d.payments||[]).map(norm)}},
-    async session(){const {data}=await sb.auth.getSession();return data.session?{email:data.session.user.email}:null},
-    async signIn(email,password){const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error},
-    async signOut(){await sb.auth.signOut()},
-    async isAdmin(){const d=chk(await sb.rpc('is_admin'));return !!d},
-    async all(){
-      const [c,i,p]=await Promise.all([sb.from('clients').select('*'),sb.from('invoices').select('*'),sb.from('payments').select('*')]);
-      return{clients:chk(c).map(r=>({...r,createdAt:r.created_at})),invoices:chk(i).map(norm),payments:chk(p).map(norm)}},
-    async saveClient(c,isNew){
-      const row={code:c.code,name:c.name,phone:c.phone,note:c.note};
-      if(isNew)chk(await sb.from('clients').insert(row));
-      else chk(await sb.from('clients').update({name:c.name,phone:c.phone,note:c.note}).eq('code',c.code))},
-    async addEntry(kind,d){
-      const row={client_code:d.clientCode,amount:d.amount,date:d.date,car:d.car,vin:d.vin,note:d.note};
-      if(kind==='inv')row.type=d.type;else row.method=d.method;
-      chk(await sb.from(kind==='inv'?'invoices':'payments').insert(row))},
-    async delEntry(kind,id){chk(await sb.from(kind==='inv'?'invoices':'payments').delete().eq('id',id))}
+function makeLiveApi(){
+  let token=null;try{token=localStorage.getItem('abr_admin_token')}catch(e){}
+  const call=async(path,payload,auth)=>{
+    const opt={method:payload?'POST':'GET',headers:{}};
+    if(payload){opt.headers['Content-Type']='application/json';opt.body=JSON.stringify(payload)}
+    if(auth&&token)opt.headers.Authorization='Bearer '+token;
+    const r=await fetch(path,opt);
+    let j={};try{j=await r.json()}catch(e){}
+    if(!r.ok){const err=new Error(j.error||('http_'+r.status));err.status=r.status;err.code=j.error;throw err}
+    return j};
+  const admin=(action,extra)=>call('/api/admin',{action,...(extra||{})},true);
+  return{
+    async settings(){return call('/api/settings')},
+    async saveSettings(s){await admin('saveSettings',s)},
+    async statement(code){try{return await call('/api/statement',{code})}catch(e){if(e.status===404)return null;throw e}},
+    async session(){return token?{}:null},
+    async signIn(_email,password){const j=await call('/api/login',{password});token=j.token;try{localStorage.setItem('abr_admin_token',token)}catch(e){}},
+    async signOut(){token=null;try{localStorage.removeItem('abr_admin_token')}catch(e){}},
+    async isAdmin(){if(!token)return false;try{await admin('check');return true}catch(e){if(e.status===401){token=null;try{localStorage.removeItem('abr_admin_token')}catch(_){}}return false}},
+    async all(){const d=await admin('data');return{clients:d.clients,invoices:d.invoices,payments:d.payments}},
+    async saveClient(c,isNew){try{await admin('saveClient',{...c,isNew})}catch(e){if(e.code==='duplicate')throw{code:'23505'};throw e}},
+    async addEntry(kind,d){await admin('addEntry',{kind,...d})},
+    async delEntry(kind,id){await admin('delEntry',{kind,id})}
   };
-}else{
+}
+function makeDemoApi(){
   const KEY='abr_demo_v1';
   const seed=()=>({
     settings:{currency:'د.ل',phone:'',whatsapp:'',address:''},
@@ -526,9 +523,11 @@ if(LIVE){
     async addEntry(kind,d){const db=load();(kind==='inv'?db.invoices:db.payments).push({...d,id:Math.random().toString(36).slice(2),createdAt:Date.now()});save()},
     async delEntry(kind,id){const db=load();const k=kind==='inv'?'invoices':'payments';db[k]=db[k].filter(x=>x.id!==id);save()}
   };
-  $('#demoBar').hidden=false;
-  $('#demoHint').hidden=false;
-  $('#adminDemoNote').hidden=false;
+  return api;
+}
+function enableDemo(){
+  LIVE=false;makeDemoApi();
+  $('#demoBar').hidden=false;$('#demoHint').hidden=false;$('#adminDemoNote').hidden=false;
 }
 
 /* ---------- routing ---------- */
@@ -629,11 +628,11 @@ async function enterAdmin(){
   await reloadAdmin();
 }
 function showAdminLogin(msg){$('#adminApp').hidden=true;$('#adminLogin').hidden=false;$('#adminTab').hidden=true;$('#aErr').textContent=msg||'';
-  $('#aEmailWrap').hidden=!LIVE;$('#aPassWrap').hidden=!LIVE}
+  $('#aEmailWrap').hidden=true;$('#aPassWrap').hidden=!LIVE}
 $('#adminLogin').addEventListener('submit',async e=>{e.preventDefault();
   $('#aBtn').disabled=true;$('#aErr').textContent='';
   try{await api.signIn($('#aEmail').value.trim(),$('#aPass').value);$('#aPass').value='';await enterAdmin()}
-  catch(err){$('#aErr').textContent='الإيميل أو كلمة المرور غير صحيحة.'}
+  catch(err){$('#aErr').textContent=err?.status===401?'كلمة المرور غير صحيحة.':'تعذر الاتصال. حاول مرة ثانية.'}
   finally{$('#aBtn').disabled=false}
 });
 $('#adminOut').addEventListener('click',async()=>{await api.signOut();isAdmin=false;showAdminLogin();location.hash='#home'});
@@ -734,12 +733,14 @@ $('#adminLedger').addEventListener('click',async e=>{const b=e.target.closest('[
 
 /* ---------- boot ---------- */
 (async()=>{
-  try{settings={...settings,...await api.settings()}}catch(e){console.warn(e)}
+  if(CFG.CANONICAL_URL&&/github\.io$/.test(location.hostname)){location.replace(CFG.CANONICAL_URL+location.hash);return}
+  try{const live=makeLiveApi();settings={...settings,...await live.settings()};api=live;LIVE=true}
+  catch(e){enableDemo();try{settings={...settings,...await api.settings()}}catch(_){}}
+  route();
   renderSettings();
   try{const s=await api.session();if(s){isAdmin=await api.isAdmin();$('#adminTab').hidden=!isAdmin}}catch(e){}
   try{const saved=sessionStorage.getItem('abr_code');if(saved)login(saved,true)}catch(e){}
 })();
-route();
 })();
 </script>
 </body>

@@ -1,6 +1,4 @@
-// إعدادات الاتصال بقاعدة البيانات (Supabase → Project Settings → API)
-// لو تركتهم فاضيين، الموقع يشتغل في وضع تجريبي والبيانات تنحفظ على نفس الجهاز بس.
+// الرابط الرسمي للموقع. لو حد فتح نسخة GitHub Pages، يتحول تلقائياً لهنا.
 window.ABR_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: ""
+  CANONICAL_URL: ""
 };
