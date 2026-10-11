@@ -210,7 +210,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
     <nav class="tabs" aria-label="الأقسام">
       <a href="#home" data-tab="home">الشركة</a>
       <a href="#portal" data-tab="portal">حسابي</a>
-      <a href="#admin" data-tab="admin" id="adminTab" hidden>الإدارة</a>
+      <a href="#admin" data-tab="admin" id="adminTab">الإدارة</a>
     </nav>
   </div>
 </header>
@@ -276,7 +276,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
       <a class="btn sea" href="#portal">الدخول بالكود</a>
     </div>
   </section>
-  <footer><div class="wrap foot">© <span id="yr"></span> عبر المحيط لاستيراد السيارات<a href="#admin">دخول الإدارة</a></div></footer>
+  <footer><div class="wrap foot">© <span id="yr"></span> عبر المحيط لاستيراد السيارات</div></footer>
 </main>
 
 <!-- ============ CLIENT PORTAL ============ -->
@@ -624,10 +624,10 @@ async function enterAdmin(){
   if(!s){showAdminLogin();return}
   try{isAdmin=await api.isAdmin()}catch(e){isAdmin=false}
   if(!isAdmin){showAdminLogin('هذا الحساب ما عندهش صلاحية الإدارة.');await api.signOut();return}
-  $('#adminLogin').hidden=true;$('#adminApp').hidden=false;$('#adminTab').hidden=false;
+  $('#adminLogin').hidden=true;$('#adminApp').hidden=false;
   await reloadAdmin();
 }
-function showAdminLogin(msg){$('#adminApp').hidden=true;$('#adminLogin').hidden=false;$('#adminTab').hidden=true;$('#aErr').textContent=msg||'';
+function showAdminLogin(msg){$('#adminApp').hidden=true;$('#adminLogin').hidden=false;$('#aErr').textContent=msg||'';
   $('#aEmailWrap').hidden=true;$('#aPassWrap').hidden=!LIVE}
 $('#adminLogin').addEventListener('submit',async e=>{e.preventDefault();
   $('#aBtn').disabled=true;$('#aErr').textContent='';
@@ -738,7 +738,7 @@ $('#adminLedger').addEventListener('click',async e=>{const b=e.target.closest('[
   catch(e){enableDemo();try{settings={...settings,...await api.settings()}}catch(_){}}
   route();
   renderSettings();
-  try{const s=await api.session();if(s){isAdmin=await api.isAdmin();$('#adminTab').hidden=!isAdmin}}catch(e){}
+  try{const s=await api.session();if(s){isAdmin=await api.isAdmin()}}catch(e){}
   try{const saved=sessionStorage.getItem('abr_code');if(saved)login(saved,true)}catch(e){}
 })();
 })();
